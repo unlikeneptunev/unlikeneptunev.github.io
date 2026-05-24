@@ -168,6 +168,8 @@
         if (e.key === "Escape") closeSearch();
     });
 
+    document.addEventListener("open-search", openSearch);
+
     overlay?.addEventListener("click", (e) => {
         if (e.target === overlay) closeSearch();
     });

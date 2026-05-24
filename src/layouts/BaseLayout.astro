@@ -194,6 +194,7 @@ const { title, description = "blogs and stuff" } = Astro.props;
                 color: #d4a017;
                 font-weight: 700;
             }
+
             .no-results {
                 padding: 1rem 1.25rem;
                 font-size: var(--size-sm);
@@ -201,62 +202,46 @@ const { title, description = "blogs and stuff" } = Astro.props;
             }
         </style>
     </head>
-    <button
-        class="theme-toggle"
-        id="themeToggle"
-        aria-label="toggle theme"
-        data-pagefind-ignore>◑</button
-    >
-    <button
-        class="search-trigger"
-        id="searchTrigger"
-        aria-label="open search"
-        data-pagefind-ignore
-    >
-    </button>
-    <button
-        class="theme-toggle"
-        id="themeToggle"
-        aria-label="toggle theme"
-        data-pagefind-ignore>◑</button
-    >
-    <button
-        class="search-trigger"
-        id="searchTrigger"
-        aria-label="open search"
-        data-pagefind-ignore
-    >
-    </button>
-    <button
-        class="search-trigger"
-        id="searchTrigger"
-        aria-label="open search"
-        data-pagefind-ignore
-    >
-        / search
-    </button>
-    <Search />
-    <slot />
-    <script>
-        const toggle = document.getElementById("themeToggle");
-        const root = document.documentElement;
-        const stored = localStorage.getItem("theme");
-        if (stored === "light") applyLight();
+    <body>
+        <button
+            class="theme-toggle"
+            id="themeToggle"
+            aria-label="toggle theme"
+            data-pagefind-ignore>◑</button
+        >
+        <button
+            class="search-trigger"
+            id="searchTrigger"
+            aria-label="open search"
+            data-pagefind-ignore>/ search</button
+        >
+        <Search />
+        <slot />
+        <script>
+            const toggle = document.getElementById("themeToggle");
+            const root = document.documentElement;
+            const stored = localStorage.getItem("theme");
+            if (stored === "light") applyLight();
 
-        toggle?.addEventListener("click", () => {
-            if (root.classList.contains("light")) {
-                root.classList.remove("light");
-                localStorage.removeItem("theme");
-            } else {
-                applyLight();
-                localStorage.setItem("theme", "light");
+            toggle?.addEventListener("click", () => {
+                if (root.classList.contains("light")) {
+                    root.classList.remove("light");
+                    localStorage.removeItem("theme");
+                } else {
+                    applyLight();
+                    localStorage.setItem("theme", "light");
+                }
+            });
+
+            function applyLight() {
+                root.classList.add("light");
             }
-        });
 
-        function applyLight() {
-            root.classList.add("light");
-        }
-    </script>
-
-
+            document
+                .getElementById("searchTrigger")
+                ?.addEventListener("click", () => {
+                    document.dispatchEvent(new CustomEvent("open-search"));
+                });
+        </script>
+    </body>
 </html>

@@ -1,0 +1,148 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="whoami">
+    <div class="page-wrapper">
+        <div class="container">
+            <a href="/" class="back-link">← home</a>
+            <h1 class="page-title">whoami</h1>
+
+            <section class="section">
+                <h2 class="section-label">handle</h2>
+                <p class="handle">unlikeneptune</p>
+            </section>
+
+            <section class="section">
+                <h2 class="section-label">bio</h2>
+                <p class="bio-text">
+                    I'm Thoriq, a 2nd-year IT student at University of
+                    Brawijaya. Currently (and continuously) learning and
+                    exploring the world of <mark>networking</mark>, <mark
+                        >sysadmin</mark
+                    > and <mark>cybersecurity</mark>.
+                </p>
+            </section>
+
+            <section class="section">
+                <h2 class="section-label">tools & skills</h2>
+                <ul class="skill-list">
+                    <li>
+                        <a
+                            href="https://www.wireshark.org/docs/"
+                            target="_blank"
+                            rel="noopener">Wireshark</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            href="https://www.sleuthkit.org/autopsy/"
+                            target="_blank"
+                            rel="noopener">Autopsy</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            href="https://www.exterro.com/digital-forensics-software/ftk-imager"
+                            target="_blank"
+                            rel="noopener">FTK Imager</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            href="https://volatility3.readthedocs.io/"
+                            target="_blank"
+                            rel="noopener">volatility3</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            href="https://docs.python.org/3/"
+                            target="_blank"
+                            rel="noopener">Python</a
+                        >
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </div>
+</BaseLayout>
+
+<style>
+    .page-title {
+        font-size: var(--size-xl);
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 3rem;
+    }
+
+    .section {
+        margin-bottom: 2.5rem;
+    }
+
+    .section-label {
+        font-size: var(--size-sm);
+        font-weight: 400;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.75rem;
+    }
+
+    .handle {
+        font-size: var(--size-lg);
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+
+    .bio-text {
+        font-size: var(--size-base);
+        color: var(--text-primary);
+        line-height: 1.8;
+    }
+
+    .skill-list {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .skill-list li {
+        border: 1px solid var(--border);
+        transition: border-color 0.15s;
+    }
+
+    .skill-list a {
+        font-size: var(--size-sm);
+        color: var(--text-secondary);
+        padding: 0.25rem 0.75rem;
+        display: block;
+        transition:
+            color 0.15s,
+            border-color 0.15s;
+    }
+
+    .skill-list a::after {
+        display: none;
+    }
+
+    .skill-list li {
+        border: 1px solid var(--border);
+        transition: border-color 0.15s;
+    }
+
+    .skill-list li:has(a:hover) {
+        border-color: var(--text-secondary);
+    }
+
+    .skill-list a:hover {
+        color: var(--accent-hover);
+    }
+
+    .bio-text mark {
+        background: none;
+        color: #d4a017;
+        font-weight: 700;
+    }
+</style>
