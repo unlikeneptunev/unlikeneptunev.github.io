@@ -1,0 +1,24 @@
+---
+import BaseLayout from './BaseLayout.astro';
+interface Props {
+  title: string;
+  date: Date;
+  tags: string[];
+  difficulty: string;
+  tools?: string[];
+}
+const { title, date, tags, difficulty, tools } = Astro.props;
+const formattedDate = date.toISOString().split('T')[0];
+---
+<BaseLayout title={title}>
+  <main>
+    <a href="/blog">← back</a>
+    <h1>{title}</h1>
+    <p>{formattedDate} · {difficulty}</p>
+    <p>tags: {tags.join(', ')}</p>
+    {tools && <p>tools: {tools.join(', ')}</p>}
+    <article>
+      <slot />
+    </article>
+  </main>
+</BaseLayout>
