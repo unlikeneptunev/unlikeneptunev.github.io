@@ -1,24 +1,121 @@
 ---
-import BaseLayout from './BaseLayout.astro';
+import BaseLayout from "./BaseLayout.astro";
 interface Props {
-  title: string;
-  date: Date;
-  tags: string[];
-  difficulty: string;
-  tools?: string[];
+    title: string;
+    date: Date;
+    tags: string[];
+    difficulty: string;
+    tools?: string[];
 }
 const { title, date, tags, difficulty, tools } = Astro.props;
-const formattedDate = date.toISOString().split('T')[0];
+const formattedDate = date.toISOString().split("T")[0];
 ---
+
 <BaseLayout title={title}>
-  <main>
-    <a href="/blog">← back</a>
-    <h1>{title}</h1>
-    <p>{formattedDate} · {difficulty}</p>
-    <p>tags: {tags.join(', ')}</p>
-    {tools && <p>tools: {tools.join(', ')}</p>}
-    <article>
-      <slot />
-    </article>
-  </main>
+    <div class="page-wrapper">
+        <div class="container">
+            <a href="/blog" class="back-link" data-pagefind-ignore>← back</a>
+            <header class="writeup-header" data-pagefind-ignore>
+                <h1>{title}</h1>
+                <p class="meta">{formattedDate} · {difficulty}</p>
+                <p class="meta">tags: {tags.join(", ")}</p>
+                {tools && <p class="meta">tools: {tools.join(", ")}</p>}
+            </header>
+            <article class="writeup-body">
+                <slot />
+            </article>
+        </div>
+    </div>
 </BaseLayout>
+
+<style>
+    .writeup-header {
+        margin-bottom: 3rem;
+    }
+
+    .writeup-header h1 {
+        font-size: var(--size-xl);
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.75rem;
+        line-height: 1.2;
+    }
+
+    .meta {
+        font-size: var(--size-sm);
+        color: var(--text-secondary);
+        line-height: 1.8;
+    }
+
+    .writeup-body {
+        font-size: var(--size-base);
+        color: var(--text-primary);
+        line-height: 1.85;
+    }
+
+    .writeup-body h1,
+    .writeup-body h2,
+    .writeup-body h3 {
+        color: var(--text-primary);
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+
+    .writeup-body h2 {
+        font-size: var(--size-lg);
+    }
+    .writeup-body h3 {
+        font-size: var(--size-base);
+    }
+
+    .writeup-body p {
+        margin-bottom: 1.25rem;
+        color: var(--text-secondary);
+    }
+
+    .writeup-body code {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        padding: 0.15em 0.4em;
+        font-size: 0.9em;
+        border-radius: 2px;
+    }
+
+    .writeup-body pre {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+        padding: 1.25rem;
+        overflow-x: auto;
+        margin-bottom: 1.5rem;
+        font-size: var(--size-sm);
+        line-height: 1.6;
+    }
+
+    .writeup-body pre code {
+        background: none;
+        border: none;
+        padding: 0;
+    }
+
+    .result-path {
+        font-size: var(--size-base);
+        font-weight: 700;
+        color: var(--text-primary);
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+
+    .result-excerpt {
+        font-size: var(--size-sm);
+        color: var(--text-secondary);
+        line-height: 1.6;
+        display: block;
+    }
+
+    .result-excerpt mark {
+        background: none;
+        color: #d4a017;
+        font-weight: 700;
+    }
+</style>

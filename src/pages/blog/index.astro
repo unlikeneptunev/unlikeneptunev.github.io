@@ -3,32 +3,113 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const writeups = await getCollection("writeups");
-console.log(
-    "writeups:",
-    writeups.length,
-    writeups.map((w) => w.id),
-);
 const sorted = writeups.sort(
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
+
+const grouped = sorted.reduce(
+    (acc, entry) => {
+        const cat = entry.data.category;
+        if (!acc[cat]) acc[cat] = [];
+        acc[cat].push(entry);
+        return acc;
+    },
+    {} as Record<string, typeof sorted>,
+);
+
+const categories = Object.keys(grouped).sort();
 ---
 
-<BaseLayout title="Blog">
-    <main>
-        <h1>writeups</h1>
-        <ul>
+<BaseLayout title="blog">
+    <div class="page-wrapper">
+        <div class="container">
+            <a href="/" class="back-link">← home</a>
+            <h1 class="page-title">writeups</h1>
             {
-                sorted.map((entry) => (
-                    <li>
-                        <a href={`/blog/${entry.id}`}>{entry.data.title}</a>
-                        <span>
-                            {entry.data.date.toISOString().split("T")[0]}
-                        </span>
-                        <span>{entry.data.category}</span>
-                        <span>{entry.data.difficulty}</span>
-                    </li>
+                categories.map((cat) => (
+                    <section class="category-group">
+                        <h2 class="category-name">{cat}</h2>
+                        <ul class="writeup-list">
+                            {grouped[cat].map((entry) => (
+                                <li>
+                                    <a
+                                        href={`/blog/${entry.id}`}
+                                        class="writeup-link"
+                                    >
+                                        <span class="writeup-title">
+                                            {entry.data.title}
+                                        </span>
+                                        <span class="writeup-meta">
+                                            {
+                                                entry.data.date
+                                                    .toISOString()
+                                                    .split("T")[0]
+                                            }{" "}
+                                            · {entry.data.difficulty}
+                                        </span>
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
                 ))
             }
-        </ul>
-    </main>
+        </div>
+    </div>
 </BaseLayout>
+
+<style>
+    .page-title {
+        font-size: var(--size-xl);
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 3rem;
+    }
+
+    .category-group {
+        margin-bottom: 3rem;
+    }
+
+    .category-name {
+        font-size: var(--size-sm);
+        font-weight: 400;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.75rem;
+    }
+
+    .writeup-list {
+        list-style: none;
+    }
+
+    .writeup-link {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 1rem;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .writeup-link::after {
+        display: none;
+    }
+
+    .writeup-title {
+        font-size: var(--size-base);
+        color: var(--text-primary);
+        transition: color 0.15s;
+    }
+
+    .writeup-link:hover .writeup-title {
+        color: var(--accent-hover);
+    }
+
+    .writeup-meta {
+        font-size: var(--size-sm);
+        color: var(--text-secondary);
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+</style>

@@ -7,6 +7,6 @@ difficulty: medium
 tools: [Detect it Easy, CFF Explorer, PEStudio, dnSpy, ProcMon, RegShot]
 ---
 
-# XWorm
+# Scenario
 
 An employee accidentally downloaded a suspicious file from a phishing email. The file executed silently, triggering unusual system behavior.

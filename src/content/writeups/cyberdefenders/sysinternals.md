@@ -7,6 +7,6 @@ difficulty: medium
 tools: [FTK Imager, Autopsy, AmCacheParser, VirusTotal, Registry Explorer]
 ---
 
-# SysInternals
+# Scenario
 
 A user thought they were downloading the SysInternals tool suite and attempted to open it, but the tools did not launch. Since then, the system has gradually slowed down.

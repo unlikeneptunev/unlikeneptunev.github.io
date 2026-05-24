@@ -1,20 +1,257 @@
 ---
+import Search from "../components/Search.astro";
 interface Props {
-  title: string;
+    title: string;
+    description?: string;
 }
-const { title } = Astro.props;
+const { title, description = "cybersecurity writeups and notes" } = Astro.props;
 ---
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
-  </head>
-  <body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content={description} />
+        <title>{title} | unlikeneptune</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+            rel="stylesheet"
+        />
+        <style is:global>
+            :root {
+                --bg: #0d0d0d;
+                --bg-secondary: #141414;
+                --border: #1e1e1e;
+                --text-primary: #c9c9c9;
+                --text-secondary: #5a5a5a;
+                --text-muted: #333333;
+                --accent: #c9c9c9;
+                --accent-hover: #ffffff;
+                --link: #c9c9c9;
+                --link-hover: #ffffff;
+                --font: "JetBrains Mono", monospace;
+                --size-base: 15px;
+                --size-sm: 13px;
+                --size-lg: 22px;
+                --size-xl: 32px;
+                --content-width: 860px;
+                --gap: 2.5rem;
+            }
+
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            html {
+                background-color: var(--bg);
+                color: var(--text-primary);
+                font-family: var(--font);
+                font-size: var(--size-base);
+                line-height: 1.7;
+                -webkit-font-smoothing: antialiased;
+            }
+
+            body {
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            a {
+                color: var(--link);
+                text-decoration: none;
+                position: relative;
+            }
+
+            a::after {
+                content: "";
+                position: absolute;
+                bottom: -1px;
+                left: 0;
+                width: 0;
+                height: 1px;
+                background-color: currentColor;
+                transition: width 0.25s ease;
+            }
+
+            a:hover {
+                color: var(--link-hover);
+            }
+
+            a:hover::after {
+                width: 100%;
+            }
+
+            .container {
+                width: 100%;
+                max-width: var(--content-width);
+                margin: 0 auto;
+                padding: 0 2rem;
+            }
+
+            .page-wrapper {
+                flex: 1;
+                padding-top: 5rem;
+                padding-bottom: 5rem;
+            }
+
+            .theme-toggle {
+                position: fixed;
+                top: 1.5rem;
+                right: 1.75rem;
+                background: none;
+                border: none;
+                cursor: pointer;
+                color: var(--text-secondary);
+                font-size: 1.1rem;
+                font-family: var(--font);
+                padding: 0.25rem;
+                line-height: 1;
+                transition: color 0.15s;
+                z-index: 100;
+            }
+
+            .theme-toggle:hover {
+                color: var(--text-primary);
+            }
+
+            .back-link {
+                display: inline-block;
+                font-size: var(--size-sm);
+                color: var(--text-secondary);
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                margin-bottom: 3rem;
+                transition: color 0.15s;
+            }
+
+            .search-trigger {
+                position: fixed;
+                bottom: 1.5rem;
+                left: 50%;
+                transform: translateX(-50%);
+                background: none;
+                border: 1px solid var(--border);
+                cursor: pointer;
+                color: var(--text-secondary);
+                font-size: var(--size-sm);
+                font-family: var(--font);
+                padding: 0.35rem 1rem;
+                transition:
+                    color 0.15s,
+                    border-color 0.15s;
+                z-index: 100;
+                letter-spacing: 0.05em;
+            }
+
+            .search-trigger:hover {
+                color: var(--text-primary);
+                border-color: var(--text-secondary);
+            }
+
+            .back-link:hover {
+                color: var(--text-primary);
+            }
+
+            .pagefind-result {
+                padding: 0.65rem 1.25rem;
+            }
+
+            .result-path {
+                font-size: var(--size-base);
+                font-weight: 700;
+                color: var(--text-primary);
+                display: block;
+                margin-bottom: 0.25rem;
+            }
+
+            .result-path::after {
+                display: none;
+            }
+
+            .result-excerpt {
+                font-size: var(--size-sm);
+                color: var(--text-secondary);
+                line-height: 1.6;
+                display: block;
+                margin: 0;
+            }
+
+            .result-excerpt mark {
+                background: none;
+                color: #d4a017;
+                font-weight: 700;
+            }
+            .no-results {
+                padding: 1rem 1.25rem;
+                font-size: var(--size-sm);
+                color: var(--text-secondary);
+            }
+        </style>
+    </head>
+    <button
+        class="theme-toggle"
+        id="themeToggle"
+        aria-label="toggle theme"
+        data-pagefind-ignore>◑</button
+    >
+    <button
+        class="search-trigger"
+        id="searchTrigger"
+        aria-label="open search"
+        data-pagefind-ignore
+    >
+    </button>
+    <button
+        class="theme-toggle"
+        id="themeToggle"
+        aria-label="toggle theme"
+        data-pagefind-ignore>◑</button
+    >
+    <button
+        class="search-trigger"
+        id="searchTrigger"
+        aria-label="open search"
+        data-pagefind-ignore
+    >
+    </button>
+    <button
+        class="search-trigger"
+        id="searchTrigger"
+        aria-label="open search"
+        data-pagefind-ignore
+    >
+        / search
+    </button>
+    <Search />
     <slot />
-  </body>
+    <script>
+        const toggle = document.getElementById("themeToggle");
+        const root = document.documentElement;
+        const stored = localStorage.getItem("theme");
+        if (stored === "light") applyLight();
+
+        toggle?.addEventListener("click", () => {
+            if (root.classList.contains("light")) {
+                root.classList.remove("light");
+                localStorage.removeItem("theme");
+            } else {
+                applyLight();
+                localStorage.setItem("theme", "light");
+            }
+        });
+
+        function applyLight() {
+            root.classList.add("light");
+        }
+    </script>
+
+
 </html>

@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -15,5 +15,8 @@
     "@astrojs/mdx": "^5.0.6",
     "@astrojs/sitemap": "^3.7.2",
     "astro": "^6.3.7"
+  },
+  "devDependencies": {
+    "pagefind": "^1.5.2"
   }
 }

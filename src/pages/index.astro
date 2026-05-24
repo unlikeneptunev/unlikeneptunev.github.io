@@ -1,17 +1,43 @@
 ---
-
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="home">
+    <div class="page-wrapper">
+        <div class="container">
+            <nav class="home-nav">
+                <a href="/blog">blog</a>
+                <a href="/whoami">whoami</a>
+                <a href="/socials">socials</a>
+            </nav>
+        </div>
+    </div>
+</BaseLayout>
+
+<style>
+    .home-nav {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.6rem;
+        margin-bottom: 4rem;
+    }
+
+    .home-nav a {
+        display: inline-block;
+        font-size: var(--size-xl);
+        font-weight: 500;
+        color: var(--text-secondary);
+        transition: color 0.15s;
+    }
+
+    .home-nav a:hover {
+        color: var(--accent-hover);
+    }
+
+    .home-logo {
+        font-size: 3rem;
+        color: var(--text-muted);
+        user-select: none;
+    }
+</style>
