@@ -1,0 +1,209 @@
+---
+
+---
+
+<div
+    id="search-overlay"
+    class="search-overlay"
+    aria-hidden="true"
+    data-pagefind-ignore
+>
+    <div class="search-modal">
+        <div class="search-input-wrap">
+            <span class="search-icon">_</span>
+            <input
+                type="text"
+                id="search-input"
+                class="search-input"
+                placeholder="search anything..."
+                autocomplete="off"
+                spellcheck="false"
+            />
+            <kbd class="search-esc">esc</kbd>
+        </div>
+        <div id="search-results" class="search-results"></div>
+    </div>
+</div>
+
+<style>
+    .search-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.75);
+        z-index: 200;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding-top: 12vh;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.15s ease;
+    }
+
+    .search-overlay.active {
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .search-modal {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 1.5rem;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border);
+    }
+
+    .search-input-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .search-icon {
+        color: var(--text-secondary);
+        font-size: var(--size-base);
+        animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+    }
+
+    .search-input {
+        flex: 1;
+        background: none;
+        border: none;
+        outline: none;
+        font-family: var(--font);
+        font-size: var(--size-base);
+        color: var(--text-primary);
+        caret-color: var(--text-primary);
+    }
+
+    .search-input::placeholder {
+        color: var(--text-muted);
+    }
+
+    .search-esc {
+        font-family: var(--font);
+        font-size: var(--size-sm);
+        color: var(--text-secondary);
+        border: 1px solid var(--border);
+        padding: 0.1em 0.4em;
+        background: none;
+    }
+
+    .search-results {
+        max-height: 420px;
+        overflow-y: auto;
+        padding: 0.75rem 0;
+    }
+
+    .search-results:empty {
+        display: none;
+    }
+
+    .pagefind-result {
+        display: block;
+        padding: 0.65rem 1.25rem;
+        transition: background 0.1s;
+    }
+
+    .pagefind-result:hover {
+        background: var(--border);
+    }
+
+    .pagefind-result::after {
+        display: none;
+    }
+</style>
+
+<script>
+    const overlay = document.getElementById("search-overlay");
+    const input = document.getElementById("search-input") as HTMLInputElement;
+    const resultsContainer = document.getElementById("search-results");
+
+    let pagefind: any = null;
+
+    async function loadPagefind() {
+        if (pagefind) return;
+        try {
+            pagefind = await import("/pagefind/pagefind.js" as any);
+            await pagefind.init();
+        } catch (e) {
+            console.warn("Pagefind not available. Run npm run build first.");
+        }
+    }
+
+    function openSearch() {
+        overlay?.classList.add("active");
+        overlay?.setAttribute("aria-hidden", "false");
+        input?.focus();
+        loadPagefind();
+    }
+
+    function closeSearch() {
+        overlay?.classList.remove("active");
+        overlay?.setAttribute("aria-hidden", "true");
+        if (input) input.value = "";
+        if (resultsContainer) resultsContainer.innerHTML = "";
+    }
+
+    document.addEventListener("keydown", (e) => {
+        const tag = (e.target as HTMLElement).tagName;
+        const isTyping = tag === "INPUT" || tag === "TEXTAREA";
+
+        if (e.key === "/" && !isTyping) {
+            e.preventDefault();
+            openSearch();
+        }
+        if (e.key === "Escape") closeSearch();
+    });
+
+    overlay?.addEventListener("click", (e) => {
+        if (e.target === overlay) closeSearch();
+    });
+
+    input?.addEventListener("input", async () => {
+        if (!pagefind || !resultsContainer) return;
+        const query = input.value.trim();
+
+        if (!query) {
+            resultsContainer.innerHTML = "";
+            return;
+        }
+
+        const search = await pagefind.search(query);
+
+        if (search.results.length === 0) {
+            resultsContainer.innerHTML = `<p class="no-results">no results for "${query}"</p>`;
+            return;
+        }
+
+        const top = await Promise.all(
+            search.results.slice(0, 8).map((r: any) => r.data()),
+        );
+
+        resultsContainer.innerHTML = top
+            .map((r: any) => {
+                const url = r.url;
+                const pathLabel =
+                    url.replace(/^\//, "").replace(/\/$/, "") || "home";
+                return `
+            <div class="pagefind-result">
+              <a href="${url}" class="result-path">${pathLabel}</a>
+              <p class="result-excerpt">${r.excerpt}</p>
+            </div>
+          `;
+            })
+            .join("");
+    });
+</script>

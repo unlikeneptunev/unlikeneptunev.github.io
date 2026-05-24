@@ -1,0 +1,53 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const links = [
+    { label: "GitHub", url: "https://github.com/unlikeneptunev" },
+    { label: "LinkedIn", url: "https://linkedin.com/in/ahmad-thoriq-h" },
+];
+---
+
+<BaseLayout title="social">
+    <div class="page-wrapper">
+        <div class="container">
+            <a href="/" class="back-link">← home</a>
+            <ul class="social-list">
+                {
+                    links.map((link) => (
+                        <li>
+                            <a
+                                href={link.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="social-link"
+                            >
+                                {link.label}
+                            </a>
+                        </li>
+                    ))
+                }
+            </ul>
+        </div>
+    </div>
+</BaseLayout>
+
+<style>
+    .social-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .social-link {
+        font-size: var(--size-xl);
+        font-weight: 500;
+        color: var(--text-secondary);
+        transition: color 0.15s;
+    }
+
+    .social-link:hover {
+        color: var(--accent-hover);
+    }
+</style>
