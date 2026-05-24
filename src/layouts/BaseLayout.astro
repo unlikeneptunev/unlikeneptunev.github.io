@@ -29,7 +29,7 @@ const { title, description = "blogs and stuff" } = Astro.props;
             :root {
                 --bg: #0d0d0d;
                 --bg-secondary: #141414;
-                --border: #1e1e1e;
+                --border: #4f4e4e;
                 --text-primary: #c9c9c9;
                 --text-secondary: #5a5a5a;
                 --text-muted: #333333;
@@ -69,6 +69,32 @@ const { title, description = "blogs and stuff" } = Astro.props;
                 flex-direction: column;
             }
 
+            body::before,
+            body::after {
+                content: "";
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                width: 1px;
+                background-color: var(--border);
+                z-index: 50;
+            }
+
+            body::before {
+                left: 2rem;
+            }
+
+            body::after {
+                right: 2rem;
+            }
+
+            @media (max-width: 600px) {
+                body::before,
+                body::after {
+                    display: none;
+                }
+            }
+
             a {
                 color: var(--link);
                 text-decoration: none;
@@ -105,26 +131,6 @@ const { title, description = "blogs and stuff" } = Astro.props;
                 flex: 1;
                 padding-top: 5rem;
                 padding-bottom: 5rem;
-            }
-
-            .theme-toggle {
-                position: fixed;
-                top: 1.5rem;
-                right: 1.75rem;
-                background: none;
-                border: none;
-                cursor: pointer;
-                color: var(--text-secondary);
-                font-size: 1.1rem;
-                font-family: var(--font);
-                padding: 0.25rem;
-                line-height: 1;
-                transition: color 0.15s;
-                z-index: 100;
-            }
-
-            .theme-toggle:hover {
-                color: var(--text-primary);
             }
 
             .back-link {
@@ -204,12 +210,6 @@ const { title, description = "blogs and stuff" } = Astro.props;
     </head>
     <body>
         <button
-            class="theme-toggle"
-            id="themeToggle"
-            aria-label="toggle theme"
-            data-pagefind-ignore>◑</button
-        >
-        <button
             class="search-trigger"
             id="searchTrigger"
             aria-label="open search"
@@ -218,25 +218,6 @@ const { title, description = "blogs and stuff" } = Astro.props;
         <Search />
         <slot />
         <script>
-            const toggle = document.getElementById("themeToggle");
-            const root = document.documentElement;
-            const stored = localStorage.getItem("theme");
-            if (stored === "light") applyLight();
-
-            toggle?.addEventListener("click", () => {
-                if (root.classList.contains("light")) {
-                    root.classList.remove("light");
-                    localStorage.removeItem("theme");
-                } else {
-                    applyLight();
-                    localStorage.setItem("theme", "light");
-                }
-            });
-
-            function applyLight() {
-                root.classList.add("light");
-            }
-
             document
                 .getElementById("searchTrigger")
                 ?.addEventListener("click", () => {
