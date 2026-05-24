@@ -3,6 +3,11 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const writeups = await getCollection("writeups");
+console.log(
+    "writeups:",
+    writeups.length,
+    writeups.map((w) => w.id),
+);
 const sorted = writeups.sort(
     (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
