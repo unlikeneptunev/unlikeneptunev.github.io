@@ -56,36 +56,26 @@
     .search-input-wrap {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
         padding: 1rem 1.25rem;
         border-bottom: 1px solid var(--border);
+        gap: 0.75rem;
     }
 
     .search-icon {
         color: var(--text-secondary);
         font-size: var(--size-base);
-        animation: blink 1s step-end infinite;
-    }
-
-    @keyframes blink {
-        0%,
-        100% {
-            opacity: 1;
-        }
-        50% {
-            opacity: 0;
-        }
     }
 
     .search-input {
         flex: 1;
         background: none;
         border: none;
-        outline: none;
+        color: var(--text-primary);
         font-family: var(--font);
         font-size: var(--size-base);
-        color: var(--text-primary);
-        caret-color: var(--text-primary);
+        padding: 0;
+        outline: none;
+        width: 100%;
     }
 
     .search-input::placeholder {
@@ -93,18 +83,20 @@
     }
 
     .search-esc {
-        font-family: var(--font);
-        font-size: var(--size-sm);
-        color: var(--text-secondary);
+        background: var(--bg);
         border: 1px solid var(--border);
-        padding: 0.1em 0.4em;
-        background: none;
+        color: var(--text-secondary);
+        padding: 0.15rem 0.4rem;
+        font-size: var(--size-xs);
+        font-family: var(--font);
+        border-radius: 3px;
+        box-shadow: 0 1px 0 var(--border);
     }
 
     .search-results {
-        max-height: 420px;
+        max-height: 50vh;
         overflow-y: auto;
-        padding: 0.75rem 0;
+        border-top: none;
     }
 
     .search-results:empty {
@@ -112,44 +104,71 @@
     }
 
     .pagefind-result {
-        display: block;
         padding: 0.65rem 1.25rem;
-        transition: background 0.1s;
     }
 
-    .pagefind-result:hover {
-        background: var(--border);
+    .result-path {
+        font-size: var(--size-base);
+        font-weight: 700;
+        color: var(--text-primary);
+        display: block;
+        margin-bottom: 0.25rem;
     }
 
-    .pagefind-result::after {
+    .result-path::after {
         display: none;
+    }
+
+    .result-excerpt {
+        font-size: var(--size-sm);
+        color: var(--text-secondary);
+        line-height: 1.6;
+        display: block;
+        margin: 0;
+    }
+
+    .result-excerpt mark {
+        background: none;
+        color: #d4a017;
+        font-weight: 700;
+    }
+
+    .no-results {
+        padding: 1rem 1.25rem;
+        font-size: var(--size-sm);
+        color: var(--text-secondary);
     }
 </style>
 
 <script>
+    declare global {
+        interface Window {
+            pagefind: any;
+        }
+    }
+
+    let pagefind: any = null;
     const overlay = document.getElementById("search-overlay");
     const input = document.getElementById("search-input") as HTMLInputElement;
     const resultsContainer = document.getElementById("search-results");
 
-    let pagefind: any = null;
-
-    async function loadPagefind() {
+    async function initPagefind() {
         if (pagefind) return;
         try {
-            pagefind = await import(
-                /* @vite-ignore */ "/pagefind/pagefind.js" as any
-            );
-            await pagefind.init();
+            pagefind = await import("/pagefind/pagefind.js" as any);
+            await pagefind.options({
+                excerptLength: 15,
+            });
         } catch (e) {
-            console.warn("Pagefind not available. Run npm run build first.");
+            console.error("Failed to load pagefind", e);
         }
     }
 
     function openSearch() {
         overlay?.classList.add("active");
         overlay?.setAttribute("aria-hidden", "false");
-        input?.focus();
-        loadPagefind();
+        setTimeout(() => input?.focus(), 50);
+        initPagefind();
     }
 
     function closeSearch() {
@@ -160,7 +179,8 @@
     }
 
     document.addEventListener("keydown", (e) => {
-        const tag = (e.target as HTMLElement).tagName;
+        const target = e.target as HTMLElement;
+        const tag = (target as HTMLElement).tagName;
         const isTyping = tag === "INPUT" || tag === "TEXTAREA";
 
         if (e.key === "/" && !isTyping) {
