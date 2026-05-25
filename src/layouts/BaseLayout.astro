@@ -1,5 +1,4 @@
 ---
-import Search from "../components/Search.astro";
 interface Props {
     title: string;
     description?: string;
@@ -151,101 +150,15 @@ const { title, description = "blogs and stuff" } = Astro.props;
                 color: var(--text-primary);
             }
 
-            .search-trigger {
-                position: fixed;
-                bottom: 1.5rem;
-                left: 50%;
-                transform: translateX(-50%);
-                background: var(--bg);
-                border: 1px solid var(--border);
-                cursor: pointer;
-                color: var(--text-secondary);
-                font-size: var(--size-sm);
-                font-family: var(--font);
-                padding: 0.35rem 1rem;
-                transition:
-                    color 0.15s,
-                    border-color 0.15s;
-                z-index: 100;
-                letter-spacing: 0.05em;
-                white-space: nowrap;
-            }
-
-            .search-trigger:hover {
-                color: var(--text-primary);
-                border-color: var(--text-secondary);
-            }
-
             @media (max-width: 600px) {
-                html,
-                body {
-                    overflow-x: hidden;
-                }
-
                 body::before,
                 body::after {
                     display: none;
                 }
-
-                .search-trigger {
-                    bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
-                    transform: translate3d(-50%, 0, 0);
-                    background: var(--bg-secondary);
-                }
-            }
-
-            .pagefind-result {
-                padding: 0.65rem 1.25rem;
-            }
-
-            .result-path {
-                font-size: var(--size-base);
-                font-weight: 700;
-                color: var(--text-primary);
-                display: block;
-                margin-bottom: 0.25rem;
-            }
-
-            .result-path::after {
-                display: none;
-            }
-
-            .result-excerpt {
-                font-size: var(--size-sm);
-                color: var(--text-secondary);
-                line-height: 1.6;
-                display: block;
-                margin: 0;
-            }
-
-            .result-excerpt mark {
-                background: none;
-                color: #d4a017;
-                font-weight: 700;
-            }
-
-            .no-results {
-                padding: 1rem 1.25rem;
-                font-size: var(--size-sm);
-                color: var(--text-secondary);
             }
         </style>
     </head>
     <body>
-        <button
-            class="search-trigger"
-            id="searchTrigger"
-            aria-label="open search"
-            data-pagefind-ignore>/ search</button
-        >
-        <Search />
         <slot />
-        <script>
-            document
-                .getElementById("searchTrigger")
-                ?.addEventListener("click", () => {
-                    document.dispatchEvent(new CustomEvent("open-search"));
-                });
-        </script>
     </body>
 </html>
