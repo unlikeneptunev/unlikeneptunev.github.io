@@ -5,6 +5,12 @@ import sitemap from "@astrojs/sitemap";
 export default defineConfig({
   site: "https://unlikeneptunev.github.io",
   integrations: [mdx(), sitemap()],
+  markdown: {
+    shikiConfig: {
+      theme: "github-dark",
+      wrap: false,
+    },
+  },
   vite: {
     build: {
       rollupOptions: {
