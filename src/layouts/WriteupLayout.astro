@@ -53,28 +53,28 @@ const formattedDate = date.toISOString().split("T")[0];
         line-height: 1.85;
     }
 
-    .writeup-body h1,
-    .writeup-body h2,
-    .writeup-body h3 {
+    .writeup-body :global(h1),
+    .writeup-body :global(h2),
+    .writeup-body :global(h3) {
         color: var(--text-primary);
         margin-top: 2.5rem;
         margin-bottom: 1rem;
         font-weight: 700;
     }
 
-    .writeup-body h2 {
+    .writeup-body :global(h2) {
         font-size: var(--size-lg);
     }
-    .writeup-body h3 {
+    .writeup-body :global(h3) {
         font-size: var(--size-base);
     }
 
-    .writeup-body p {
+    .writeup-body :global(p) {
         margin-bottom: 1.25rem;
-        color: var(--text-secondary);
+        color: var(--text-primary);
     }
 
-    .writeup-body code {
+    .writeup-body :global(code) {
         background: var(--bg-secondary);
         border: 1px solid var(--border);
         padding: 0.15em 0.4em;
@@ -82,20 +82,46 @@ const formattedDate = date.toISOString().split("T")[0];
         border-radius: 2px;
     }
 
-    .writeup-body pre {
+    .writeup-body :global(pre) {
         background: var(--bg-secondary);
         border: 1px solid var(--border);
         padding: 1.25rem;
         overflow-x: auto;
         margin-bottom: 1.5rem;
-        font-size: var(--size-sm);
+        font-size: var(--size-base);
         line-height: 1.6;
     }
 
-    .writeup-body pre code {
+    .writeup-body :global(pre) :global(code) {
         background: none;
         border: none;
         padding: 0;
+    }
+
+    .writeup-body :global(img) {
+        max-width: 100%;
+        width: 100%;
+        height: auto;
+        display: block;
+        border: 1px solid var(--border);
+        margin: 1.5rem 0;
+    }
+
+    .writeup-body :global(h3) {
+        font-size: var(--size-base);
+        font-weight: 700;
+        color: #d4a017;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-top: 2.5rem;
+        margin-bottom: 0.5rem;
+        padding-left: 0.75rem;
+        border-left: 2px solid var(--border);
+    }
+
+    .writeup-body :global(strong) {
+        color: var(--text-primary);
+        font-weight: 700;
     }
 
     .result-path {

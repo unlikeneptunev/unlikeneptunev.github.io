@@ -8,14 +8,29 @@ export default defineConfig({
   markdown: {
     shikiConfig: {
       theme: "github-dark",
-      wrap: false,
+      wrap: true,
     },
   },
   vite: {
+    optimizeDeps: {
+      exclude: ["pagefind"],
+    },
     build: {
       rollupOptions: {
         external: ["/pagefind/pagefind.js"],
       },
     },
+    plugins: [
+      {
+        name: "pagefind-dev-stub",
+        resolveId(id) {
+          if (id === "/pagefind/pagefind.js") return id;
+        },
+        load(id) {
+          if (id === "/pagefind/pagefind.js")
+            return "export default {}; export const init = () => {}; export const search = () => ({ results: [] });";
+        },
+      },
+    ],
   },
 });

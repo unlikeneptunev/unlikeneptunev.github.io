@@ -136,7 +136,9 @@
     async function loadPagefind() {
         if (pagefind) return;
         try {
-            pagefind = await import("/pagefind/pagefind.js" as any);
+            pagefind = await import(
+                /* @vite-ignore */ "/pagefind/pagefind.js" as any
+            );
             await pagefind.init();
         } catch (e) {
             console.warn("Pagefind not available. Run npm run build first.");
