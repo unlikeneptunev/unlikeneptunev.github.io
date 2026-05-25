@@ -36,13 +36,25 @@ const { title, description = "blogs and stuff" } = Astro.props;
                 --text-primary: #c9c9c9;
                 --text-secondary: #5a5a5a;
                 --text-muted: #333333;
+                --accent: #c9c9c9;
+                --accent-hover: #ffffff;
+                --link: #c9c9c9;
+                --link-hover: #ffffff;
                 --font: "JetBrains Mono", monospace;
-                --size-xs: 0.75rem;
-                --size-sm: 0.875rem;
-                --size-base: 1rem;
-                --size-lg: 1.25rem;
-                --size-xl: 1.5rem;
-                --size-2xl: 2rem;
+                --size-base: 15px;
+                --size-sm: 13px;
+                --size-lg: 22px;
+                --size-xl: 32px;
+                --content-width: 860px;
+                --gap: 2.5rem;
+            }
+
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
             }
 
             html {
@@ -52,22 +64,99 @@ const { title, description = "blogs and stuff" } = Astro.props;
                 font-size: var(--size-base);
                 line-height: 1.7;
                 -webkit-font-smoothing: antialiased;
-                overflow-x: hidden;
             }
 
             body {
                 min-height: 100vh;
                 display: flex;
                 flex-direction: column;
-                overflow-x: hidden;
+            }
+
+            body::before,
+            body::after {
+                content: "";
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                width: 1px;
+                background-color: var(--border);
+                z-index: 50;
+            }
+
+            body::before {
+                left: 2rem;
+            }
+
+            body::after {
+                right: 2rem;
+            }
+
+            a {
+                color: var(--link);
+                text-decoration: none;
+                position: relative;
+            }
+
+            a:visited {
+                color: var(--link);
+            }
+
+            a::after {
+                content: "";
+                position: absolute;
+                bottom: -1px;
+                left: 0;
+                width: 0;
+                height: 1px;
+                background-color: currentColor;
+                transition: width 0.25s ease;
+            }
+
+            a:hover {
+                color: var(--link-hover);
+            }
+
+            a:hover::after {
+                width: 100%;
+            }
+
+            .container {
+                width: 100%;
+                max-width: var(--content-width);
+                margin: 0 auto;
+                padding: 0 2rem;
+            }
+
+            .page-wrapper {
+                flex: 1;
+                padding-top: 5rem;
+                padding-bottom: 5rem;
+            }
+
+            .back-link {
+                display: inline-block;
+                font-size: var(--size-sm);
+                color: var(--text-secondary);
+                text-transform: uppercase;
+                letter-spacing: 0.08em;
+                margin-bottom: 3rem;
+                transition: color 0.15s;
+            }
+
+            .back-link:visited {
+                color: var(--text-secondary);
+            }
+
+            .back-link:hover {
+                color: var(--text-primary);
             }
 
             .search-trigger {
                 position: fixed;
                 bottom: 1.5rem;
                 left: 50%;
-                transform: translate3d(-50%, 0, 0);
-                background: var(--bg-secondary);
+                transform: translateX(-50%);
+                background: var(--bg);
                 border: 1px solid var(--border);
                 cursor: pointer;
                 color: var(--text-secondary);
@@ -76,104 +165,33 @@ const { title, description = "blogs and stuff" } = Astro.props;
                 padding: 0.35rem 1rem;
                 transition:
                     color 0.15s,
-                    border-color 0.15s,
-                    background-color 0.15s;
+                    border-color 0.15s;
                 z-index: 100;
                 letter-spacing: 0.05em;
                 white-space: nowrap;
-                width: auto;
-                box-sizing: border-box;
             }
 
             .search-trigger:hover {
                 color: var(--text-primary);
                 border-color: var(--text-secondary);
-                background: var(--border);
             }
 
             @media (max-width: 600px) {
+                html,
+                body {
+                    overflow-x: hidden;
+                }
+
+                body::before,
+                body::after {
+                    display: none;
+                }
+
                 .search-trigger {
                     bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px));
-                    left: 50%;
                     transform: translate3d(-50%, 0, 0);
+                    background: var(--bg-secondary);
                 }
-            }
-
-            .search-overlay {
-                position: fixed;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.75);
-                z-index: 200;
-                display: flex;
-                align-items: flex-start;
-                justify-content: center;
-                padding-top: 12vh;
-                opacity: 0;
-                pointer-events: none;
-                transition: opacity 0.15s ease;
-            }
-
-            .search-overlay.active {
-                opacity: 1;
-                pointer-events: all;
-            }
-
-            .search-modal {
-                width: 100%;
-                max-width: 600px;
-                margin: 0 1.5rem;
-                background: var(--bg-secondary);
-                border: 1px solid var(--border);
-            }
-
-            .search-input-wrap {
-                display: flex;
-                align-items: center;
-                padding: 1rem 1.25rem;
-                border-bottom: 1px solid var(--border);
-                gap: 0.75rem;
-            }
-
-            .search-icon {
-                color: var(--text-secondary);
-                font-size: var(--size-base);
-            }
-
-            .search-input {
-                flex: 1;
-                background: none;
-                border: none;
-                color: var(--text-primary);
-                font-family: var(--font);
-                font-size: var(--size-base);
-                padding: 0;
-                outline: none;
-                width: 100%;
-            }
-
-            .search-input::placeholder {
-                color: var(--text-muted);
-            }
-
-            .search-esc {
-                background: var(--bg);
-                border: 1px solid var(--border);
-                color: var(--text-secondary);
-                padding: 0.15rem 0.4rem;
-                font-size: var(--size-xs);
-                font-family: var(--font);
-                border-radius: 3px;
-                box-shadow: 0 1px 0 var(--border);
-            }
-
-            .search-results {
-                max-height: 50vh;
-                overflow-y: auto;
-                border-top: none;
-            }
-
-            .search-results:empty {
-                display: none;
             }
 
             .pagefind-result {
