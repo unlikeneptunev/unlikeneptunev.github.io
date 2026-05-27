@@ -36,3 +36,12 @@ The command with `-r` flag specifies the hive file we want to parse, and `-f` te
 ![q1_2](/images/writeups/phishy/q1_2.png)
 
 After opening the output file in Zed and looking for the important part, in this case like `hostname` or `ComputerName`, we can verify that the hostname of the victim's machine is `WIN-NF3JQEU4G0T`.
+
+### Question 2: What is the messaging app installed on the victim machine?
+**Answer**: WhatsApp
+
+On Windows, apps typically installed on `Program Files`, `Program Files (x86)` or `AppData` directory. In both `Program Files` directories, there is no messaging apps at all. So, we can check if `AppData` has anything.
+
+![q2](/images/writeups/phishy/q2.png)
+
+As we can see, we found a `WhatsApp` folder on `AppData\Roaming` directory as the only possible messaging app on the computer. WhatsApp is a popular cross-platform messaging app offered by Meta.
