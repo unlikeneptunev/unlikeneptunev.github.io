@@ -1,7 +1,7 @@
 ---
 title: "Redline"
 date: 2026-02-18
-category: cyberdefenders
+platform: cyberdefenders
 tags: [endpoint, privilege escalation, defense evasion, c2]
 difficulty: medium
 tools: [volatility3, strings]

@@ -1,7 +1,7 @@
 ---
 title: "SysInternals"
 date: 2026-05-20
-category: cyberdefenders
+platform: cyberdefenders
 tags: [forensics, endpoint, windows, amcache, registry]
 difficulty: medium
 tools: [FTK Imager, Autopsy, AmCacheParser, VirusTotal, Registry Explorer]

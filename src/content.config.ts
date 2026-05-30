@@ -6,9 +6,12 @@ const writeups = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
-    category: z.string(),
-    tags: z.array(z.string()),
-    difficulty: z.enum(["easy", "medium", "hard"]),
+    platform: z.string(),
+    tags: z.array(z.string()).optional().default([]),
+    difficulty: z
+      .enum(["easy", "medium", "hard", "n/a"])
+      .optional()
+      .default("n/a"),
     tools: z.array(z.string()).optional(),
   }),
 });

@@ -9,7 +9,7 @@ const sorted = writeups.sort(
 
 const grouped = sorted.reduce(
     (acc, entry) => {
-        const cat = entry.data.category;
+        const cat = entry.data.platform;
         if (!acc[cat]) acc[cat] = [];
         acc[cat].push(entry);
         return acc;
