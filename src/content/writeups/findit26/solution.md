@@ -148,3 +148,23 @@ The solver reads the memory stack in binary to track the position of the `HTTP P
 ```
 FindITCTF{#kita usahakan wfh gaji usd itu!!}
 ```
+
+# Misc: Did You Find IT? [50 pts]
+## Description:
+The FindIT Instagram feed is great, isn’t it? Especially the logo
+
+Author: Find IT! 2026
+
+## Solution
+Free flag, bro
+
+I went straight to **[FindIT’s Instagram](https://www.instagram.com/ugm.findit/)**, then scrolled around to the post revealing the logo. **[In this post](https://www.instagram.com/p/DUVBD06kipI/)**, there was something interesting in the caption.
+
+![findit](/images/writeups/findit26/findit/findit.png)
+
+I tried decoding it from Base64 and got the flag.
+
+## Flag
+```
+FindITCTF{jangan_lupa_follow_ig_findit}
+```
