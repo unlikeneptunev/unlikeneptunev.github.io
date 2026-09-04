@@ -17,7 +17,7 @@ One of the main entry points for malware is the the OS's `Downloads` folder, sin
 
 ![q1](/images/writeups/sysinternals/q1.png)
 
-We cannot find anything useful in the `IEUSer`, so we navigate to `Public` user. In the `Downloads`folder, we can find a Windows executable named `SysInternals.exe`. Originally, SysInternals is a collection of over 70 utilities to diagnose, manage, troubleshoot, and secure Windows systems, developed by Mark Russinovich. As far as we can tell, SysInternals does not provide a single executable to run or install, but rather an individual executable for each utilities, or an MSIX Bundle, not an `EXE` file. So, `SysInternals.exe` is the answer.
+We cannot find anything useful in the `IEUSer`, so we navigate to `Public` user. In the `Downloads`folder, we can find a Windows executable named `SysInternals.exe`. Originally, SysInternals is a collection of over 70 utilities to diagnose, manage, troubleshoot, and secure Windows systems, developed by Mark Russinovich. As far as we can tell, SysInternals does not provide a single executable to run or install, but rather an individual executable for each utilities, or an MSIX Bundle, not an `EXE` file. So, `SysInternals.exe` is the answer.
 
 ### Question 2: When was the last time the malicious executable file was modified?
 **Answer:** `2022-11-15 21:18`
