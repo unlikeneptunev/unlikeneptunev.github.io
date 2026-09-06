@@ -74,6 +74,24 @@ const formattedDate = date.toISOString().split("T")[0];
         color: var(--text-primary);
     }
 
+    .writeup-body :global(ul),
+    .writeup-body :global(ol) {
+        margin-bottom: 1.25rem;
+        padding-left: 1.5rem;
+    }
+
+    .writeup-body :global(ul) {
+        list-style: disc;
+    }
+
+    .writeup-body :global(ol) {
+        list-style: decimal;
+    }
+
+    .writeup-body :global(li) {
+        margin-bottom: 0.25rem;
+    }
+
     .writeup-body :global(code) {
         background: var(--bg-secondary);
         border: 1px solid var(--border);
