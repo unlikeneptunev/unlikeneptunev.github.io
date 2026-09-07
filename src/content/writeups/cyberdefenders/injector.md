@@ -238,3 +238,74 @@ Persistence is possible because the attacker has created a local user. This fits
 Sub-technique T1136.001 creates a local account.
 Sub-technique T1136.002 creates a domain account.
 Sub-technique T1136.003 creates a cloud account.
+
+### Question 15: The attacker uploaded a simple command shell through file upload vulnerability. Provide the name of the URL parameter used to execute commands?
+
+**Answer: `cmd`**
+
+This question likely points us to `access.log` again. Open, look for the keyword "`shell`".
+
+![q15](/images/writeups/injector/q15.png)
+
+The attacker uploaded a PHP file, likely contains a PHP shell, and then performed `cmd` with various other commands.
+
+### Question 16: One of the uploaded files by the attacker has an md5 that starts with "559411". Provide the full hash.
+
+**Answer: `5594112b531660654429f8639322218b`**
+
+Checked the `D:\xampp\htdocs\DVWA` directory and found suspicious file named `webshell.php`. This is the likely PHP shell uploaded by the attacker. Check the hashes with VirusTotal.
+
+![q16](/images/writeups/injector/q16.png)
+
+### Question 17: The attacker used Command Injection to add user "hacker" to the "Remote Desktop Users" Group. Provide the IP address that was part of the executed command?
+
+**Answer: `192.168.56.102`**
+
+Using `malfind` plugin in Volatility, we found a suspicious process, that is `xampp-control.exe`. 
+
+![q17](/images/writeups/injector/q17.png)
+
+We can try to dump it.
+
+```powershell
+vol2 -f memdump.mem --profile=Win2008SP1x86 memdump -p 2768 -D memdump_out
+strings.exe 2768.dmp | grep 'hacker' -B 5 -A 5
+```
+
+![q17_2](/images/writeups/injector/q17_2.png)
+
+The command ran from the IP of `192.168.56.102`.
+
+### Question 18: The attacker dropped a shellcode through SQLi vulnerability. The shellcode was checking for a specific version of PHP. Provide the PHP version number?
+
+**Answer: `4.1.0`**
+
+Yet another LOG analysis. This time, it seems that the payloads are encoded. So I asked my LDR best friend (Claude) to make a script for both finding and decoding the payloads.
+
+```python
+#!/usr/bin/env python3
+import re
+import sys
+
+LOG_PATH = sys.argv[1] if len(sys.argv) > 1 else "access.log"
+MIN_HEX_LEN = 40  # filter out short sqlmap markers like 0x7178717871
+
+pattern = re.compile(r"0x([0-9a-fA-F]+)")
+
+with open(LOG_PATH, "r", errors="ignore") as f:
+    for lineno, line in enumerate(f, 1):
+        for match in pattern.finditer(line):
+            hexstr = match.group(1)
+            if len(hexstr) < MIN_HEX_LEN:
+                continue
+            try:
+                decoded = bytes.fromhex(hexstr).decode("utf-8", errors="replace")
+            except ValueError:
+                continue
+            if "php" in decoded.lower() or "<?php" in decoded.lower():
+                print(f"[line {lineno}] hex len={len(hexstr)}")
+                print(decoded)
+                print("-" * 80)
+```
+
+![q18](/images/writeups/injector/q18.png)
