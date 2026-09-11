@@ -50,7 +50,6 @@ As we can see in FTK Imager above, the `issue` file tells us that the target mac
 There's no way that we can access the target's console and do `ip a` in order to get the IP address. However, we can get it from the file `dhclient.eth0.leases` in `/var/lib/dhcp3`. That file contains all IP addresses assigned by the DHCP server.
 
 ```bash
-
 lease {
   interface "eth0";
   fixed-address 10.0.2.15;
@@ -135,3 +134,7 @@ lease {
 ```
 
 Looking at the full content, `192.168.56.102` appeared 6 times which is dominant, representing the IP used by the time of the incident.
+
+### Question 4: What are the attacker's two IP addresses?
+
+**Answer: `192.168.56.1`, `192.168.56.101`**
