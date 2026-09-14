@@ -186,11 +186,17 @@ const { title, description = "blogs and stuff" } = Astro.props;
         <button id="theme-toggle" aria-label="toggle theme" data-pagefind-ignore
             >light</button
         >
+        <button
+            id="back-to-top"
+            aria-label="back to top"
+            data-pagefind-ignore
+            >↑ top</button
+        >
 
         <style is:global>
             #theme-toggle {
                 position: fixed;
-                bottom: 1.5rem;
+                top: 1.5rem;
                 right: 3.5rem;
                 background: none;
                 border: 1px solid var(--border);
@@ -207,6 +213,38 @@ const { title, description = "blogs and stuff" } = Astro.props;
             }
 
             #theme-toggle:hover {
+                color: var(--text-primary);
+                border-color: var(--text-primary);
+            }
+
+            #back-to-top {
+                position: fixed;
+                bottom: 1.5rem;
+                right: 3.5rem;
+                background: none;
+                border: 1px solid var(--border);
+                cursor: pointer;
+                color: var(--text-secondary);
+                font-size: var(--size-sm);
+                font-family: var(--font);
+                padding: 0.35rem 1rem;
+                transition:
+                    color 0.15s,
+                    border-color 0.15s,
+                    opacity 0.2s,
+                    visibility 0.2s;
+                z-index: 100;
+                letter-spacing: 0.05em;
+                opacity: 0;
+                visibility: hidden;
+            }
+
+            #back-to-top.visible {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            #back-to-top:hover {
                 color: var(--text-primary);
                 border-color: var(--text-primary);
             }
@@ -233,6 +271,19 @@ const { title, description = "blogs and stuff" } = Astro.props;
                     localStorage.setItem("theme", "light");
                     toggle.textContent = "dark";
                 }
+            });
+
+            const backToTop = document.getElementById("back-to-top");
+            window.addEventListener("scroll", () => {
+                if (window.scrollY > 400) {
+                    backToTop?.classList.add("visible");
+                } else {
+                    backToTop?.classList.remove("visible");
+                }
+            });
+
+            backToTop?.addEventListener("click", () => {
+                window.scrollTo({ top: 0, behavior: "smooth" });
             });
         </script>
     </body>

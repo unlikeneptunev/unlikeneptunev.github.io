@@ -109,7 +109,7 @@ Local File Inclusion (LFI) is a web security vulnerability where an application 
 
 Looking into the `access.log` (again), we can see the LFI pattern clearly. The attacker is trying to read the `hosts` file, which is a plaintext file that maps domain names to specific IP addresses.
 
-### Question 10: The attacker tried to update some firewall rules using netsh command. Provide the value of the type parameter in the executed command?
+### Question 10: The attacker tried to update some firewall rules using `netsh` command. Provide the value of the type parameter in the executed command?
 
 **Answer: `remotedesktop`**
 
