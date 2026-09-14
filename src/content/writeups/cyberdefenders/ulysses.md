@@ -240,3 +240,22 @@ The Netcat process (`nc`) has the PID of `2169`.
 
 Looking from the `exim4`'s `mainlog`, we can see that multiple instances of command execution involving external communications and activities tied to the `exim4` service, specifically exploiting a buffer overflow vulnerability.
 
+### Question 8: What is the CVE number of exploited vulnerability?
+
+**Answer: CVE-2010-4344**
+
+Looking for the CVE requires us to search a few keyword. For example, we can use "exim4 buffer overflow CVE" keywords to look for the CVE. Scrolling through results gave us this.
+
+![q8](/images/writeups/ulysses/q8.png)
+
+There are some matches too. For instance, the Exim version is right below 4.70 as stated in the database, RCE, and also exploits buffer overflow volnerability. The year timestamp (2011) was also a match with the latest CVE at that time. 
+
+### Question 9: During this attack, the attacker downloaded two files to the server. Provide the name of the compressed file.
+
+**Answer: `rk.tar`**
+
+The term "downloaded" can make us immediately thought of the `~/Downloads` directory. But, looking in there gave us no results. Instead, we can also check `/tmp` directory, too. Because this is an attack, the attacker probably store the files there that can be easily removed later.
+
+![q9](/images/writeups/ulysses/q9.png)
+
+In `/tmp`, we can find the file, which is `rk.tar` archive that contains multiple files. The most interesting file there is `install.sh`, which installed a rootkit inside the victim's machine.
