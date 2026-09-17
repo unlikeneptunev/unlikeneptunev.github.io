@@ -259,3 +259,57 @@ The term "downloaded" can make us immediately thought of the `~/Downloads` direc
 ![q9](/images/writeups/ulysses/q9.png)
 
 In `/tmp`, we can find the file, which is `rk.tar` archive that contains multiple files. The most interesting file there is `install.sh`, which installed a rootkit inside the victim's machine.
+
+### Question 10: During the investigation, two ports were involved in the process of data exfiltration. Which port did the `nc` command used for the exfiltration?
+
+**Answer: `8888`**
+
+We can go look on the `netstat` result we got earlier. There, a connection between `192.168.56.102` and `192.168.56.1` using Netcat (`nc`) through TCP port `8888` was established.
+
+```text title="netstat.txt"
+TCP      192.168.56.102  :56955 192.168.56.1    : 8888 ESTABLISHED                    nc/2169
+```
+
+### Question 11: Which port did the attacker try to block on the firewall?
+
+**Answer: `45295`**
+
+In Question 9, we got the archive name which is `rk.tar`. We can export the file, and decompress it. 
+
+```powershell
+C:\RK
+│   dropbear
+│   install.sh
+│   mig
+│   vars.sh
+│
+└───procps
+        free
+        kill
+        pgrep
+        pkill
+        pmap
+        ps
+        pwdx
+        skill
+        slabtop
+        snice
+        sysctl
+        tload
+        top
+        uptime
+        vmstat
+        w
+        watch
+```
+
+Opening `install.sh`, there is a repetitive `iptabes` command that we can breakdown.
+
+`iptables -I OUTPUT 1 -p tcp --dport 45295 -j DROP`
+
+- `-I OUTPUT 1`: inserts this rule at position `1` of the `OUTPUT` chain, so it's evaluated first before any other rule
+- `p tcp`: matches TCP traffic only
+- `--dport 45295`: matches outbound connections to destination port `45295`
+- `-j DROP`: silently discards matching packets, no rejection notice sent back
+
+This rule exists to block the compromised host from making its own outbound TCP connections to port `45295`, the exact port dropbear listens on for inbound backdoor access. 
