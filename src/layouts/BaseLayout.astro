@@ -19,7 +19,7 @@ const { title, description = "blogs and stuff" } = Astro.props;
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
             rel="stylesheet"
         />
         <link
@@ -39,11 +39,12 @@ const { title, description = "blogs and stuff" } = Astro.props;
                 --accent-hover: #ffffff;
                 --link: #c9c9c9;
                 --link-hover: #ffffff;
-                --font: "JetBrains Mono", monospace;
-                --size-base: 15px;
-                --size-sm: 13px;
-                --size-lg: 22px;
-                --size-xl: 32px;
+                --font: "Inter", sans-serif;
+                --font-mono: "JetBrains Mono", monospace;
+                --size-base: 16px;
+                --size-sm: 14px;
+                --size-lg: 24px;
+                --size-xl: 34px;
                 --content-width: 860px;
                 --gap: 2.5rem;
             }
@@ -74,6 +75,7 @@ const { title, description = "blogs and stuff" } = Astro.props;
                 background-color: var(--bg);
                 color: var(--text-primary);
                 font-family: var(--font);
+                font-feature-settings: "tnum" 1;
                 font-size: var(--size-base);
                 line-height: 1.7;
                 -webkit-font-smoothing: antialiased;
@@ -105,6 +107,13 @@ const { title, description = "blogs and stuff" } = Astro.props;
 
             body::after {
                 right: 2rem;
+            }
+
+            code,
+            pre,
+            kbd,
+            samp {
+                font-family: var(--font-mono);
             }
 
             a {
@@ -203,7 +212,7 @@ const { title, description = "blogs and stuff" } = Astro.props;
                 cursor: pointer;
                 color: var(--text-secondary);
                 font-size: var(--size-sm);
-                font-family: var(--font);
+                font-family: var(--font-mono);
                 padding: 0.35rem 1rem;
                 transition:
                     color 0.15s,
@@ -226,7 +235,7 @@ const { title, description = "blogs and stuff" } = Astro.props;
                 cursor: pointer;
                 color: var(--text-secondary);
                 font-size: var(--size-sm);
-                font-family: var(--font);
+                font-family: var(--font-mono);
                 padding: 0.35rem 1rem;
                 transition:
                     color 0.15s,
